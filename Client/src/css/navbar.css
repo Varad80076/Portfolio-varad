@@ -1,0 +1,9 @@
+@media (min-width: 992px) {
+    .navbar-toggler {
+      display: none;
+    }
+    .navbar .collapse .nav {
+      display: none;
+    }
+  }
+ 

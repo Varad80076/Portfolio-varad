@@ -1,0 +1,48 @@
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+
+ async  function otpmailsender( name,email,message, emailType) {
+  try {
+    var transport = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOption = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Thank You for Connecting",
+      html:
+    emailType === "VERIFY"
+          ? `<div style="font-family: Arial, sans-serif; line-height: 1.6; background-color: #f5f5f5; padding:10px">
+            <img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;" src="${process.env.IMAGE}" width="360" height="250">
+              <h3>Hello,${name}</h3>
+              <p>Thank you for taking the time to connect with me. I truly appreciate your effort and look forward to meaningful interactions. Please don’t hesitate to reach out if there’s anything I can assist you with or discuss further.</p>
+              <p>Looking forward to staying in touch.</p>
+              <p>Best regards,</p>
+              <p>Varad Badgujar</p>
+            </div>`
+          : `<div style="font-family: Arial, sans-serif; line-height: 1.6;">
+              <h2>Reset Your Password</h2>
+              <p>Hello,</p>
+              <p>Please reset your password using the OTP below:</p>
+              <h3 style="color: #4CAF50;">${otp}</h3>
+              <p>If you didn’t request this, you can safely ignore this email.</p>
+            </div>`,
+    };
+
+    const mailResponse = await transport.sendMail(mailOption);
+    return mailResponse;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+}
+
+module.exports = otpmailsender;
